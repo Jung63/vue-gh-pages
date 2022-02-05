@@ -1,36 +1,29 @@
-import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.esm-browser.js';
-
-const url = 'https://vue3-course-api.hexschool.io/v2'
-
+import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.esm-browser.js'
+const site = 'https://vue3-course-api.hexschool.io/v2'
 const app = createApp({
     data() {
         return {
             user: {
                 username: '',
-                password: ''
-            },
-        };
+                password: '',
+            }
+        }
     },
     methods: {
         login() {
-            axios.post(`${url}/admin/signin`, this.user)
+            const url = `${site}/admin/signin`;
+            axios.post(url, this.user)
                 .then((res) => {
-                    console.log(res);
-                    //取得token,expired參數
                     const { token, expired } = res.data;
-                    //儲存cookie
-                    document.cookie = `hexToken = ${token};expired= ${new Date(expired)}`;
-
-                    window.location = 'products.html';
+                    //存取token
+                    document.cookie = `hexToken=${token}; expires=${new Date(expired)}`;
+                    window.location = './products.html';
                 })
-                .catch((err)=>{
-                    console.dir(err);
-                    alert("請輸入正確帳號密碼");
+                .catch((err) => {
+                    console.log(err);
+                    alert(error.data.message);
                 })
         }
     },
 });
-
-
-
-app.mount('#app');
+app.mount('#app')
