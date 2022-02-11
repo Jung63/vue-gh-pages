@@ -2,6 +2,9 @@ import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.
 
 const site = 'https://vue3-course-api.hexschool.io/v2';
 const api_path = 'jung';
+
+let productModal = {};
+
 const app = createApp({
     data() {
         return {
@@ -30,10 +33,17 @@ const app = createApp({
         },
         openProduct(item) {
             this.tempProduct = item;
-        }
+        },
+        
     },
     mounted() {
         this.checkLogin();
+        productModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+        productModal.show();
+        //現在卡在複製bootstrap互動視窗 ，然後我彈出來的視窗卡住 影音11:15
+        setTimeout(() => {
+           productModal.hide 
+        }, 3000);
     }
 });
 app.mount('#app')
