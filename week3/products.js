@@ -2,16 +2,20 @@ import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.
 
 const site = 'https://vue3-course-api.hexschool.io/v2';
 const api_path = 'jung';
-
+//因還需呼叫，所以定義在外層，先設定空物件到時候可被覆蓋
 let productModal = {};
 
 const app = createApp({
     data() {
         return {
             products: [],
-            tempProduct: {},
+            tempProduct: {
+                //多圖(陣列)
+                imagesUrl: [],
+            },
         }
     },
+    //方法
     methods: {
         checkLogin() {
             // 取出 Token
@@ -31,19 +35,16 @@ const app = createApp({
                     this.products = res.data.products;
                 })
         },
-        openProduct(item) {
-            this.tempProduct = item;
-        },
-        
+        //打開productModal
+        openModal() {
+            productModal.show();
+        }
+
     },
     mounted() {
         this.checkLogin();
-        productModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-        productModal.show();
-        //現在卡在複製bootstrap互動視窗 ，然後我彈出來的視窗卡住 影音11:15
-        setTimeout(() => {
-           productModal.hide 
-        }, 3000);
+        productModal = new bootstrap.Modal(document.getElementById('productModal'));
+
     }
 });
 app.mount('#app')

@@ -16,7 +16,7 @@
   <div id="app">
     <div class="container">
       <div class="text-end mt-4">
-        <button class="btn btn-primary" @click="openModal('new')">
+        <button class="btn btn-primary" @click="openModal" type="button">
           建立新的產品
         </button>
       </div>
@@ -68,25 +68,7 @@
     <!-- Modal -->
     <div id="productModal" ref="productModal" class="modal fade" tabindex="-1" aria-labelledby="productModalLabel"
       aria-hidden="true">
-      <!-- 測試範例 -->
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              ...
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- 測試範例 -->
+
       <div class="modal-dialog modal-xl">
         <div class="modal-content border-0">
           <div class="modal-header bg-dark text-white">
@@ -100,37 +82,25 @@
             <div class="row">
               <div class="col-sm-4">
                 <div class="mb-3">
-                  <label for="imageUrl" class="form-label">主要圖片</label>
-                  <input v-model="tempProduct.imageUrl" type="text" class="form-control mb-2" placeholder="請輸入圖片連結">
-                  <img class="img-fluid" :src="tempProduct.imageUrl">
+                  <label for="imgUrl" class="form-label">主圖網址</label>
+                  <input type="text" class="form-control" id="imgUrl" v-model="tempProduct.imageUrl">
+                  <img :src="tempProduct.imagesUrl" class="img-fluid border" alt="">
                 </div>
-                <h3 class="mb-3">多圖新增</h3>
-                <div v-if="Array.isArray(tempProduct.imagesUrl)">
-                  <div class="mb-1" v-for="(image, key) in tempProduct.imagesUrl" :key="key">
-                    <div class="mb-3">
-                      <label for="imageUrl" class="form-label">圖片網址</label>
-                      <input v-model="tempProduct.imagesUrl[key]" type="text" class="form-control"
-                        placeholder="請輸入圖片連結">
+                <div class="mb-3">
+                  <h3>多圖設置</h3>
+                  <!-- 判斷tempProduct.imagesUrl是否為陣列，若為陣列則往下執行 -->
+                  <div v-if="Array.isArray(tempProduct.imagesUrl)">(哈囉)
+                    <div class="mb-1" v-for="(img,key)in tempProduct.imagesUrl" :key="key+'1235'">
+                      <input type="text" class="form-control" id="imagesUrl" v-model="tempProduct.imagesUrl">
+                      <img :src="tempProduct.imagesUrl" class="img-fluid border" alt="">
                     </div>
-                    <img class="img-fluid" :src="image">
-                  </div>
-                  <div v-if="!tempProduct.imagesUrl.length || tempProduct.imagesUrl[tempProduct.imagesUrl.length - 1]">
-                    <button class="btn btn-outline-primary btn-sm d-block w-100"
-                      @click="tempProduct.imagesUrl.push('')">
-                      新增圖片
-                    </button>
-                  </div>
-                  <div v-else>
-                    <button class="btn btn-outline-danger btn-sm d-block w-100" @click="tempProduct.imagesUrl.pop()">
-                      刪除圖片
-                    </button>
+                    <button type="button" class="btn btn-primary w-100"
+                      @click="tempProduct.imagesUrl.push('')">新增</button>
+                    <button type="button" class="btn btn-outline-danger w-100"
+                      @click="tempProduct.imagesUrl.pop()">刪除最後一個</button>
                   </div>
                 </div>
-                <div v-else>
-                  <button class="btn btn-outline-primary btn-sm d-block w-100" @click="createImages">
-                    新增圖片
-                  </button>
-                </div>
+
               </div>
               <div class="col-sm-8">
                 <div class="mb-3">
@@ -153,6 +123,7 @@
                 <div class="row">
                   <div class="mb-3 col-md-6">
                     <label for="origin_price" class="form-label">原價</label>
+                    <!-- 若要輸入純值，V-model要加上number -->
                     <input id="origin_price" v-model.number="tempProduct.origin_price" type="number" min="0"
                       class="form-control" placeholder="請輸入原價">
                   </div>
