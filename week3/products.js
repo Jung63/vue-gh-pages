@@ -4,6 +4,7 @@ const site = 'https://vue3-course-api.hexschool.io/v2';
 const api_path = 'jung';
 //因還需呼叫，所以定義在外層，先設定空物件到時候可被覆蓋
 let productModal = {};
+let delProductModal = {};
 
 const app = createApp({
     data() {
@@ -13,6 +14,7 @@ const app = createApp({
                 //多圖(陣列)
                 imagesUrl: [],
             },
+            isNew: false,
         }
     },
     //方法
@@ -36,15 +38,53 @@ const app = createApp({
                 })
         },
         //打開productModal
-        openModal() {
-            productModal.show();
+        openModal(status, product) {
+            if (status === 'isNew') {
+                this.tempProduct = {
+                    imagesUrl: [],
+                }
+                productModal.show();
+                this.isNew = true;
+            } else if (status === 'edit') {
+                //物件傳參考 淺拷貝
+                this.tempProduct = { ...product };
+                productModal.show();
+                this.isNew = false;
+            } else if (status === 'delete') {
+                delProductModal.show();
+                this.tempProduct = { ...product };
+            }
+        },
+        updateProduct() {
+            let url = `${site}/api/${api_path}/admin/product`;
+            let method = 'post';
+            if (!this.isNew) {
+                url = `${site}/api/${api_path}/admin/product/${this.tempProduct.id}`;
+                method = 'put';
+            }
+            axios[method](url, { data: this.tempProduct })
+                .then((res) => {
+                    console.log(res);
+                    // 重新取得產品列表
+                    this.getProduct();
+                    productModal.hide();
+                })
+        },
+        delProduct() {
+            let url = `${site}/api/${api_path}/admin/product/${this.tempProduct.id}`;
+            axios.delete(url)
+                .then(res => {
+                    console.log(res);
+                    // 重新取得產品列表
+                    this.getProduct();
+                    productModal.hide();
+                })
         }
-
     },
     mounted() {
         this.checkLogin();
         productModal = new bootstrap.Modal(document.getElementById('productModal'));
-
+        delProductModal = new bootstrap.Modal(document.getElementById('delProductModal'));
     }
 });
 app.mount('#app')
