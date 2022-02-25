@@ -47,7 +47,7 @@ const app = createApp({
                 this.isNew = true;
             } else if (status === 'edit') {
                 //物件傳參考 淺拷貝
-                this.tempProduct = { ...product };
+                this.tempProduct = { imagesUrl: [], ...product };//助教建議部分:加上imagesUrl避免編輯時無法新增多圖
                 productModal.show();
                 this.isNew = false;
             } else if (status === 'delete') {
@@ -77,7 +77,8 @@ const app = createApp({
                     console.log(res);
                     // 重新取得產品列表
                     this.getProduct();
-                    productModal.hide();
+                    delProductModal.hide();
+                    //助教建議:應該是要將 delProductModal 隱藏，這樣確認刪除的 Modal 才會成功隱藏哦
                 })
         }
     },
