@@ -73,7 +73,7 @@ const app = createApp({
 });
 //全域註冊 - 建立新產品
 app.component('productModal', {
-    props: ['tempProduct'],
+    props: ['tempProduct', 'isNew'],
     template: `#templateForProductModal`,
     methods: {
         updateProduct() {
@@ -86,10 +86,14 @@ app.component('productModal', {
             axios[method](url, { data: this.tempProduct })
                 .then((res) => {
                     console.log(res);
+                    alert(res.data.message);
                     // this.getProducts();//沒有getProduct(這是外層的方法)
                     this.$emit('get-products')
                     productModal.hide();
                 })
+                .catch((err) => {
+                    alert(err.data.message);
+                });
         },
     }
 })
@@ -102,11 +106,14 @@ app.component('delProductModal', {
             axios.delete(url)
                 .then(res => {
                     console.log(res);
+                    alert(res.data.message)
                     // 重新取得產品列表
                     this.$emit('get-products')
                     delProductModal.hide();
-
                 })
+                .catch((err) => {
+                    alert(err.data.message);
+                });
         }
     }
 })

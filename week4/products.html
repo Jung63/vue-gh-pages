@@ -75,7 +75,7 @@
     <div id="productModal" ref="productModal" class="modal fade" tabindex="-1" aria-labelledby="productModalLabel"
       aria-hidden="true">
       <!-- 內:get-products,外:getProducts -->
-      <product-modal :temp-product="tempProduct" @get-products="getProducts"></product-modal>>
+      <product-modal :temp-product="tempProduct" :is-new="isNew" @get-products="getProducts"></product-modal>>
     </div>
     <div id="delProductModal" ref="delProductModal" class="modal fade" tabindex="-1"
       aria-labelledby="delProductModalLabel" aria-hidden="true">
