@@ -3,6 +3,27 @@ import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.
 const site = 'https://vue3-course-api.hexschool.io/v2';
 const api_path = 'jung';
 
+// const { defineRule, Form, Field, ErrorMessage, configure } = VeeValidate;
+// const { required, email, min, max } = VeeValidateRules;
+// const { localize, loadLocaleFromURL } = VeeValidateI18n;
+
+// defineRule('required', required);
+// defineRule('email', email);
+// defineRule('min', min);
+// defineRule('max', max);
+
+// loadLocaleFromURL('https://unpkg.com/@vee-validate/i18n@4.1.0/dist/locale/zh_TW.json');
+
+// configure({ // 用來做一些設定
+//     generateMessage: localize('zh_TW'), //啟用 locale 
+// });
+
+// Object.keys(VeeValidateRules).forEach(rule => {
+//     if (rule !== 'default') {
+//         VeeValidate.defineRule(rule, VeeValidateRules[rule]);
+//     }
+// });
+
 const app = createApp({
     data() {
         return {
@@ -21,13 +42,13 @@ const app = createApp({
             });
         },
         openProductModal(id) {
-            this.$refs.productModal.openModal();
             this.productId = id;
+            this.$refs.productModal.openModal();
         },
         getCart() {
             axios.get(`${site}/api/${api_path}/cart`).then((res) => {
                 console.log(res);
-                this.cartData = res.data.data
+                this.cartData = res.data.data;
             });
         },
         addToCart(id, qty = 1) {
@@ -38,19 +59,18 @@ const app = createApp({
             this.isLoadingItem = id;//讀取id
             axios.post(`${site}/api/${api_path}/cart`, { data }).then((res) => {
                 console.log(res);
-                this.isLoadingItem = '';//讀取id結束會清空
                 this.getCart();
                 this.$refs.productModal.closeModal();
+                this.isLoadingItem = '';//讀取id結束會清空
                 alert(res.data.message);
             });
-
         },
         removeCartItem(id) {
+            this.isLoadingItem = id;
             axios.delete(`${site}/api/${api_path}/cart/${id}`).then((res) => {
-                this.isLoadingItem = id;
-                this.isLoadingItem = '';
-                this.getCart();
                 console.log(res);
+                this.getCart();
+                this.isLoadingItem = '';
             });
         },
         removeAllCart() {
@@ -70,8 +90,8 @@ const app = createApp({
             this.isLoadingItem = item.id;
             axios.put(`${site}/api/${api_path}/cart/${item.id}`, { data }).then((res) => {
                 console.log(res);
-                this.isLoadingItem = '';
                 this.getCart();
+                this.isLoadingItem = '';
             });
         },
     },
@@ -80,6 +100,7 @@ const app = createApp({
         this.getCart();
     },
 });
+
 // 註冊一個元件  //refs
 app.component('product-modal', {
     props: ['id'],
@@ -90,12 +111,13 @@ app.component('product-modal', {
             product: {},
             qty: 1,
         };
-    },//watch監控id，若id有變動
+    },
+    //watch監控id，若id有變動
     watch: {
         id() {//當id觸發時，啟動遠端資料
             this.getProduct();
             console.log(this.id);
-        }
+        },
     },
     methods: {
         openModal() {
@@ -118,6 +140,6 @@ app.component('product-modal', {
         //ref="modal"
         this.modal = new bootstrap.Modal(this.$refs.modal);
     },
-})
+});
 
 app.mount('#app');
