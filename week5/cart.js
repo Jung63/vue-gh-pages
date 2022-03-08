@@ -3,26 +3,26 @@ import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.
 const site = 'https://vue3-course-api.hexschool.io/v2';
 const api_path = 'jung';
 
-// const { defineRule, Form, Field, ErrorMessage, configure } = VeeValidate;
-// const { required, email, min, max } = VeeValidateRules;
-// const { localize, loadLocaleFromURL } = VeeValidateI18n;
+const { defineRule, Form, Field, ErrorMessage, configure } = VeeValidate;
+const { required, email, min, max } = VeeValidateRules;
+const { localize, loadLocaleFromURL } = VeeValidateI18n;
 
-// defineRule('required', required);
-// defineRule('email', email);
-// defineRule('min', min);
-// defineRule('max', max);
+defineRule('required', required);
+defineRule('email', email);
+defineRule('min', min);
+defineRule('max', max);
 
-// loadLocaleFromURL('https://unpkg.com/@vee-validate/i18n@4.1.0/dist/locale/zh_TW.json');
+loadLocaleFromURL('https://unpkg.com/@vee-validate/i18n@4.1.0/dist/locale/zh_TW.json');
 
-// configure({ // 用來做一些設定
-//     generateMessage: localize('zh_TW'), //啟用 locale 
-// });
+configure({ // 用來做一些設定
+    generateMessage: localize('zh_TW'), //啟用 locale 
+});
 
-// Object.keys(VeeValidateRules).forEach(rule => {
-//     if (rule !== 'default') {
-//         VeeValidate.defineRule(rule, VeeValidateRules[rule]);
-//     }
-// });
+Object.keys(VeeValidateRules).forEach(rule => {
+    if (rule !== 'default') {
+        VeeValidate.defineRule(rule, VeeValidateRules[rule]);
+    }
+});
 
 const app = createApp({
     data() {
@@ -31,8 +31,21 @@ const app = createApp({
             products: [],
             productId: '',
             isLoadingItem: '', //定義變數=>讀取效果
-
+            form: {
+                user: {
+                    name: '',
+                    email: '',
+                    tel: '',
+                    address: '',
+                },
+                message: '',
+            },
         };
+    },
+    components: {
+        VForm: Form,
+        VField: Field,
+        ErrorMessage: ErrorMessage,
     },
     methods: {
         getProducts() {
@@ -94,6 +107,16 @@ const app = createApp({
                 this.isLoadingItem = '';
             });
         },
+        createOrder() {
+            const order = this.form;
+            axios.post(`${site}/api/${api_path}/order`, { data: order }).then((res) => {
+                alert(res.data.message);
+                this.$refs.form.resetForm();
+                this.getCart();
+            }).catch((error) => {
+                alert(error.data.message);
+            });
+        },
     },
     mounted() { //初始化就取得
         this.getProducts();
@@ -141,5 +164,4 @@ app.component('product-modal', {
         this.modal = new bootstrap.Modal(this.$refs.modal);
     },
 });
-
 app.mount('#app');
