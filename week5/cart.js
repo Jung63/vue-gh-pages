@@ -41,6 +41,7 @@ const app = createApp({
                 this.isLoadingItem = '';//讀取id結束會清空
                 this.getCart();
                 this.$refs.productModal.closeModal();
+                alert(res.data.message);
             });
 
         },
@@ -50,6 +51,15 @@ const app = createApp({
                 this.isLoadingItem = '';
                 this.getCart();
                 console.log(res);
+            });
+        },
+        removeAllCart() {
+            axios.delete(`${site}/api/${api_path}/carts`).then((res) => {
+                this.getCart();
+                alert(res.data.message);
+                // console.log(res);
+            }).catch((err) => {
+                alert(err.data.message);
             });
         },
         updateCartItem(item) {
