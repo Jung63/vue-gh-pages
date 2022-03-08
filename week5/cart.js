@@ -38,10 +38,11 @@ const app = createApp({
             this.isLoadingItem = id;//讀取id
             axios.post(`${site}/api/${api_path}/cart`, { data }).then((res) => {
                 console.log(res);
+                this.isLoadingItem = '';//讀取id結束會清空
+                this.getCart();
+                this.$refs.productModal.closeModal();
             });
-            this.isLoadingItem = '';//讀取id結束會清空
-            this.getCart();
-            this.$refs.productModal.closeModal();
+
         },
         removeCartItem(id) {
             axios.delete(`${site}/api/${api_path}/cart/${id}`).then((res) => {
@@ -51,7 +52,7 @@ const app = createApp({
                 console.log(res);
             });
         },
-        updateCartItem(item) {//選取數量需要重新整理才會改變
+        updateCartItem(item) {
             const data = {
                 product_id: item.id,
                 qty: item.qty,
@@ -59,9 +60,9 @@ const app = createApp({
             this.isLoadingItem = item.id;
             axios.put(`${site}/api/${api_path}/cart/${item.id}`, { data }).then((res) => {
                 console.log(res);
+                this.isLoadingItem = '';
+                this.getCart();
             });
-            this.isLoadingItem = '';
-            this.getCart();
         },
     },
     mounted() { //初始化就取得
