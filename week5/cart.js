@@ -9,13 +9,15 @@ const { localize, loadLocaleFromURL } = VeeValidateI18n;
 
 defineRule('required', required);
 defineRule('email', email);
-defineRule('min', min);
-defineRule('max', max);
+defineRule('min', min); //限制最小的值 ex 8碼
+defineRule('max', max); //限制最大的值
 
+//本地端語言
 loadLocaleFromURL('https://unpkg.com/@vee-validate/i18n@4.1.0/dist/locale/zh_TW.json');
 
 configure({ // 用來做一些設定
     generateMessage: localize('zh_TW'), //啟用 locale 
+    validateOnInput: true, //輸入文字立即驗證
 });
 
 Object.keys(VeeValidateRules).forEach(rule => {
@@ -24,7 +26,8 @@ Object.keys(VeeValidateRules).forEach(rule => {
     }
 });
 
-const app = createApp({
+
+const app = Vue.createApp({
     data() {
         return {
             cartData: {},
@@ -50,7 +53,6 @@ const app = createApp({
     methods: {
         getProducts() {
             axios.get(`${site}/api/${api_path}/products/all`).then((res) => {
-                console.log(res);
                 this.products = res.data.products;
             });
         },
@@ -60,7 +62,6 @@ const app = createApp({
         },
         getCart() {
             axios.get(`${site}/api/${api_path}/cart`).then((res) => {
-                console.log(res);
                 this.cartData = res.data.data;
             });
         },
@@ -71,7 +72,6 @@ const app = createApp({
             };
             this.isLoadingItem = id;//讀取id
             axios.post(`${site}/api/${api_path}/cart`, { data }).then((res) => {
-                console.log(res);
                 this.getCart();
                 this.$refs.productModal.closeModal();
                 this.isLoadingItem = '';//讀取id結束會清空
@@ -109,7 +109,8 @@ const app = createApp({
         },
         createOrder() {
             const order = this.form;
-            axios.post(`${site}/api/${api_path}/order`, { data: order }).then((res) => {
+            const url = `${site}/api/${api_path}/order`;
+            axios.post(url, { data: order }).then((res) => {
                 alert(res.data.message);
                 this.$refs.form.resetForm();
                 this.getCart();
