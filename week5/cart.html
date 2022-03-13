@@ -136,7 +136,6 @@
                 <!-- 表單驗證 -->
                 <!-- 綁定ref form 讓 vee validate執行表單清空 -->
                 <v-form ref="form" class="col-md-6" v-slot="{ errors }" @submit="createOrder">
-                    {{ errors }}
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <v-field id="email" name="email" type="email" class="form-control"
