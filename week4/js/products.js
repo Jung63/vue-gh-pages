@@ -33,7 +33,8 @@ const app = createApp({
             axios.post(url)
                 .then(() => {
                     this.getProducts();
-                })
+                }).catch(window.location = './index.html')
+            // 可以使用.catch，當沒有登入時可以跳轉回登入頁面
         },
         getProducts(page = 1) {//參數預設值
             //query ?後方就稱為query
